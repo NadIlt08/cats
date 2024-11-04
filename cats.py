@@ -1,12 +1,11 @@
-from cProfile import label
+
 from tkinter import *
+from tkinter import ttk
 from PIL import Image,  ImageTk
 import requests # Модуль, который отправляет запросы в интернет
 from io import BytesIO # Позволяет работать с выводом инф и работать с байтами (1 и 0)(чтобы из байтов превратить в нормальное изображение)
 
-from pygame.display import update
-from pygame.examples.cursors import image
-
+Allowed_tags = ["sleep", "jump", "fight", "white", "bengal", "siamese", "cute", "black"]
 
 def load_image(url):
     try:
@@ -21,7 +20,7 @@ def load_image(url):
         return None
 
 def open_new_window():
-    tag = tag_entry.get()
+    tag = tag_combobox.get()
     url_tag = f"https://cataas.com/cat/{tag}" if tag else "https://cataas.com/cat"
     img = load_image(url_tag) # функция загрузки изображения, эту img положим в другую ниже (label.image = img)
     if img:
@@ -39,11 +38,8 @@ window = Tk()
 window.title("Cats!")
 window.geometry("600x520")
 
-tag_entry = Entry()
-tag_entry.pack()
-
-load_button = Button(text="Загрузить по тегу", command=open_new_window)
-load_button.pack()
+# tag_entry = Entry()
+# tag_entry.pack()
 
 mainmenu = Menu(window)
 window.config(menu=mainmenu)
@@ -58,5 +54,14 @@ filemenu.add_command(label="Выход", command=exit)
 # update_button.pack()
 
 url = "https://cataas.com/cat"
+
+tag_label = Label(text="Выбери тег")
+tag_label.pack()
+
+tag_combobox = ttk.Combobox(values=Allowed_tags)
+tag_combobox.pack()
+
+load_button = Button(text="Загрузить по тегу", command=open_new_window)
+load_button.pack()
 
 window.mainloop()
