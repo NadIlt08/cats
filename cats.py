@@ -1,3 +1,4 @@
+from cProfile import label
 from tkinter import *
 from PIL import Image,  ImageTk
 import requests # Модуль, который отправляет запросы в интернет
@@ -25,16 +26,28 @@ def set_image():
         label.config(image=img)
         label.image = img # чтобы сборщик мусора пайтона картинку не убрал, присваиваем метке
 
+def exit():
+    window.destroy()
 
 window = Tk()
 window.title("Cats!")
 window.geometry("600x520")
 
+mainmenu = Menu(window)
+window.config(menu=mainmenu)
+
+filemenu = Menu(mainmenu, tearoff=0)
+mainmenu.add_cascade(label="Файл", menu=filemenu)
+filemenu.add_command(label="Загрузить фото", command=set_image)
+filemenu.add_separator()
+filemenu.add_command(label="Выход", command=exit)
+
+
 label = Label()
 label.pack()
 
-update_button = Button(text="Обновить", command=set_image)
-update_button.pack()
+# update_button = Button(text="Обновить", command=set_image)
+# update_button.pack()
 
 url = "https://cataas.com/cat"
 
