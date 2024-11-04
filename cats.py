@@ -3,11 +3,11 @@ from PIL import Image,  ImageTk
 import requests # Модуль, который отправляет запросы в интернет
 from io import BytesIO # Позволяет работать с выводом инф и работать с байтами (1 и 0)(чтобы из байтов превратить в нормальное изображение)
 
-from bottle import response
-from image.views import image
+from pygame.display import update
+from pygame.examples.cursors import image
 
 
-def load_image():
+def load_image(url):
     try:
         response = requests.get(url) # делаем запрос по этой ссылке и то, что вернется, положим в ответ(response).
         response.raise_for_status() # для обработки исключений: если будет ошибка, то появится тут
@@ -18,6 +18,13 @@ def load_image():
         print (f"Произошла ошибка: {e}")
         return None
 
+def set_image():
+    ing = load_image(url) # функция загрузки изображения, эту img положим в другую ниже (label.image = img)
+    if img:
+        label.config(image=img)
+        label.image = img # чтобы сборщик мусора пайтона картинку не убрал, присваиваем метке
+
+
 window = Tk()
 window.title("Cats!")
 window.geometry("600x480")
@@ -25,11 +32,11 @@ window.geometry("600x480")
 label = Label()
 label.pack()
 
-url = "https://cataas.com/cat"
-img = load_image(url) # функция загрузки изображения, эту img положим в другую ниже (label.image = img)
+update_button = Button(text="Обновить", command=set_image)
+update_button.pack()
 
-if img:
-    label.config(image=img)
-    label.image = img # чтобы сборщик мусора пайтона картинку не убрал, присваиваем метке
+url = "https://cataas.com/cat"
+
+set_image()
 
 window.mainloop()
